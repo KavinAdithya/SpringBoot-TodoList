@@ -1,5 +1,7 @@
 package com.techcrack.todo.hello;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -7,9 +9,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HelloController {
 	
+	private Logger log = LoggerFactory.getLogger(getClass());
+	
 	@RequestMapping("/say-hello")
 	@ResponseBody
 	public String hello() {
+		log.debug("Debug Log in Hello Controller");
+		
 		return "Hello Techies ! What are You Learning ? ";
 	}
 	
@@ -17,6 +23,9 @@ public class HelloController {
 	@ResponseBody
 	public String helloHtml() {
 		StringBuffer sb = new StringBuffer();
+		
+		log.info("New {}", "Kabin");
+		log.debug("Debug Log in Hello Controller say-hello-html");
 		
 		sb.append("<head>");
 		sb.append("<title>");
