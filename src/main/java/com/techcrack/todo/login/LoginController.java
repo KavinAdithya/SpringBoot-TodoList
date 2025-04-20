@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@RequestMapping("/login")
+@RequestMapping("/todos/login")
+@SessionAttributes("name")
 public class LoginController {
 	
 	private Logger log = LoggerFactory.getLogger(getClass());
@@ -30,9 +32,12 @@ public class LoginController {
 		
 		
 		if (ser.isValidUserIdAndPassword(name, password)) {
+			
 			log.debug("User tried to login is {} and password is {}", name, password);
+	
 			map.put("name", name);
 			map.put("password", password);
+
 			return "welcome";
 		}
 		

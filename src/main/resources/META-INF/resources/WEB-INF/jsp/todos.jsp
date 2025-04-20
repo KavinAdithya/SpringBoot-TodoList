@@ -3,12 +3,12 @@
 <html>
 	<head>
 		<title>
-			Todo-Techcrack
+			Todo-List
 		</title>
 	</head>
 	<body>
 		<h1>
-			Welcome ${name} To Tech-Crack Universe !
+			Todos Are : 
 		</h1>
 		<%
 			List<Todo> todos = (List)request.getAttribute("todos");

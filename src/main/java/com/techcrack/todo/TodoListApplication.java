@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EntityScan(basePackages={"com.techcrack.todo.user", "com.techcrack.todo.todos"})
+@EntityScan(basePackages={"com.techcrack.todo.*"})
 @EnableJpaRepositories(basePackages="com.techcrack.todo.data")
 public class TodoListApplication {
 
