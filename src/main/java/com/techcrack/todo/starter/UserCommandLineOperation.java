@@ -28,13 +28,13 @@ public class UserCommandLineOperation implements CommandLineRunner{
 		
 		var todo1 = new Todo();
 		todo1.setDescription("First Todo");
-		todo1.setDone(true);
+		todo1.setIsDone(true);
 		todo1.setTargetDate(LocalDate.now());
 		todo1.setUsername(user);
 		
 		var todo2 = new Todo();
 		todo2.setDescription("Second Todo");
-		todo2.setDone(false);
+		todo2.setIsDone(false);
 		todo2.setTargetDate(LocalDate.now());
 		todo2.setUsername(user);
 		

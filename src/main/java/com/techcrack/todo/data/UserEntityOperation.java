@@ -1,4 +1,4 @@
-		package com.techcrack.todo.data;
+package com.techcrack.todo.data;
 
 import java.util.List;
 
@@ -18,6 +18,11 @@ public class UserEntityOperation {
 		repo.save(user);
 	}
 	
+	@SuppressWarnings("deprecation")
+	public User getUserById(Long id) {
+		return repo.getById(id);
+	}
+	
 	public List<User> getAllUsers() {
 		return repo.findAll();
 	}
@@ -25,6 +30,13 @@ public class UserEntityOperation {
 	@SuppressWarnings("deprecation")
 	public List<Todo> getToByID(Long id) {
 		return repo.getById(id).getTodos();
+	}
+	
+	public void addTodo(Long id, Todo todo) {
+		User user =  getUserById(id);
+		user.getTodos().add(todo);
+		todo.setUsername(user);
+		saveUser(user);
 	}
 	
 	public void deleteAll() {

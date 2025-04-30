@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
-@RequestMapping("/todos/login")
-@SessionAttributes("name")
+@RequestMapping("/todos/auth")
+@SessionAttributes({"name", "id"})
 public class LoginController {
 	
 	private Logger log = LoggerFactory.getLogger(getClass());
@@ -21,12 +24,12 @@ public class LoginController {
 	@Autowired
 	private AuthenticationService ser;
 	
-	@GetMapping
+	@GetMapping("login")
 	public String redirectLoginPage() {
-		return "login";
+		return "auth/login";
 	}
 	
-	@PostMapping
+	@PostMapping("login")
 	public String authenticateLogin(@RequestParam String name, 
 					@RequestParam String password, ModelMap map) {
 		
@@ -37,13 +40,22 @@ public class LoginController {
 	
 			map.put("name", name);
 			map.put("password", password);
+			map.put("id", 1);
 
-			return "welcome";
+			return "about/welcome";
 		}
 		
 		map.put("error", "Invalid username or password");
 		
 		log.error("Failed to Login Due to Invalid Username: {} or Password : {}", name, password);
-		return "login";
+		return "auth/login";
+	}
+	
+	@GetMapping("/logout")
+	@ResponseBody
+	public String logOut(HttpSession session) {
+		session.invalidate();
+		
+		return "Successfully Logout the session";
 	}
 }
