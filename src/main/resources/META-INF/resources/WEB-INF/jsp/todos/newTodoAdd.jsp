@@ -1,5 +1,7 @@
 <%@ page import="com.techcrack.todo.todos.*, java.util.List" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -12,10 +14,12 @@
 	<body>
 		<div class="container">
 			<h1>Enter Todo Data : </h1>
-			<form method="post">
-				<label>Description : </label> <input type="text" name="description"/>
+			<form:form method="post" modelAttribute="todo">
+				<label>Description : </label> <form:input type="text" path="description" required="true"/><br>
+				<label>Description : </label> <form:input type="date" path="targetDate" required="true"/><br>
+				<label>Description : </label> <form:input type="text" path="isDone" required="true"/>
 				<input type="submit" class="btn btn-success"/>
-			</form>
+			</form:form>
 			
 		</div>
 		
