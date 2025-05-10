@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="todos")
@@ -28,6 +29,7 @@ public class Todo {
 	@JoinColumn(name="user_id")
 	private User user;
 	
+	@Size(min=10, message="Description length must be Greater than 10.")
 	@Column(name="todo_description")
 	private String description;
 	

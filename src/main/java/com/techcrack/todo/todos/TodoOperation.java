@@ -2,9 +2,12 @@ package com.techcrack.todo.todos;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +16,13 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.techcrack.todo.data.UserEntityOperation;
 
+import jakarta.validation.Valid;
+
 @Controller
 @RequestMapping("/todos")
 public class TodoOperation {
+	
+	private Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private UserEntityOperation service;
@@ -42,7 +49,13 @@ public class TodoOperation {
 			return "redirect:/todos/auth/login";
 		}
 		
-		map.put("todo", new Todo());
+		Todo todo = new Todo();
+		todo.setDescription("Kavin Adithya Likes Reading Books!!!");
+		
+		map.put("todo", todo);
+		
+//		System.out.println(todo);
+//		log.debug(todo.toString());
 		
 		return "todos/newTodoAdd";
 	}
@@ -50,7 +63,12 @@ public class TodoOperation {
 	@PostMapping("/add-todo")
 	public String renderTodo(@SessionAttribute(name = "id", required = false) Long id, 
 							@SessionAttribute(name = "name", required = false) String name, 
-							@ModelAttribute("todo") Todo todo) {
+							@ModelAttribute("todo") @Valid Todo todo,
+							BindingResult result) {
+		
+		if (result.hasErrors()) {
+			return "todos/newTodoAdd";
+		}
 		
 		if (name == null) {
 			return "redirect:/todos/auth/login";
@@ -60,8 +78,11 @@ public class TodoOperation {
 //		todo.setDescription(todo1description);
 //		todo.setIsDone(false);
 //		todo.setTargetDate(LocalDate.now());
-//		
+
+		
+		System.out.print("Logs....");
 		service.addTodo(id, todo);
+		log.debug(todo.toString());
 		
 		return "redirect:/todos/todo-list";
 	}
