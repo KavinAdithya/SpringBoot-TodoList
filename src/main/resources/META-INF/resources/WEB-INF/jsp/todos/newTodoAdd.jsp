@@ -16,7 +16,7 @@
 			<h1>Enter Todo Data : </h1>
 			<form:form method="post" modelAttribute="todo">
 				<label>Description : </label> <form:input type="text" path="description" required="true"/>
-												<form:errors type="text" path="description"/><br><br>
+												<form:errors cssStyle="color:red;" type="text" path="description"/><br><br>
 				  
 				<label>Target Date : </label> <form:input type="date" path="targetDate" required="true"/><br><br>
 				<label>Is It Completed : </label> <form:input type="text" path="isDone" required="true"/><br><br>

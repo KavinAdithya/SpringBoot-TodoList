@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.techcrack.todo.data.UserEntityOperation;
@@ -54,9 +55,6 @@ public class TodoOperation {
 		
 		map.put("todo", todo);
 		
-//		System.out.println(todo);
-//		log.debug(todo.toString());
-		
 		return "todos/newTodoAdd";
 	}
 	
@@ -74,16 +72,61 @@ public class TodoOperation {
 			return "redirect:/todos/auth/login";
 		}
 		
-//		Todo todo = new Todo();
-//		todo.setDescription(todo1description);
-//		todo.setIsDone(false);
-//		todo.setTargetDate(LocalDate.now());
-
-		
-		System.out.print("Logs....");
 		service.addTodo(id, todo);
 		log.debug(todo.toString());
 		
 		return "redirect:/todos/todo-list";
+	}
+	
+	@GetMapping("delete-todo")
+	public String deleteTodo(@RequestParam Long id, 
+							@SessionAttribute(name="name", required=false) String name,
+							@SessionAttribute(name="id", required=false) Long userId) {
+		if (name == null) {
+			return "redirect:/todos/auth/login";
+		}
+		
+		service.deleteTodoById(userId, id);
+		return "redirect:/todos/todo-list";
+	}
+	
+	@GetMapping("update-todo") 
+	public String updateTodo(
+				@RequestParam Long id,
+				ModelMap model, 
+				@SessionAttribute(name = "name",required=false) String name,
+				@SessionAttribute(name = "id", required=false) Long userId) {
+		if (name == null) {
+			return "redirect:/todos/auth/login";
+		}
+		
+		List<Todo> todos = service.getUserById(userId).getTodos();
+		
+		Todo todo = findTodo(todos, id);
+		
+		model.put("todo", todo);
+		
+		return "todos/newTodoAdd";
+	}
+	
+	
+	@PostMapping("update-todo")
+	public String updateTodo(@ModelAttribute Todo todo, 
+			@SessionAttribute(name = "name",required=false) String name,
+			@SessionAttribute(name = "id", required=false) Long userId) {
+		service.updateTodo(userId, todo, todo.getId());
+		
+		log.debug("Updated Todo Data");
+		
+		return "redirect:/todos/todo-list";
+	}
+	
+	
+	
+	private Todo findTodo(List<Todo> todos, Long id) {
+		return todos.stream()
+					.filter(x -> x.getId() == id)
+					.toList()
+					.get(0);
 	}
 }
