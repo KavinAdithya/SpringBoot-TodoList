@@ -9,8 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.techcrack.todo.data.UserEntityOperation;
-import com.techcrack.todo.todos.Todo;
-import com.techcrack.todo.user.User;
+import com.techcrack.todo.entity.Todo;
+import com.techcrack.todo.entity.User;
 
 @Component
 public class UserCommandLineOperation implements CommandLineRunner{

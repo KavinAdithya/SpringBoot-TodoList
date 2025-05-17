@@ -1,4 +1,4 @@
-package com.techcrack.todo.login;
+package com.techcrack.todo.service.auth;
 
 import org.springframework.stereotype.Service;
 

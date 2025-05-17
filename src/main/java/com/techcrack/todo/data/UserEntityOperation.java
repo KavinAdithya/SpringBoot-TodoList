@@ -2,14 +2,18 @@ package com.techcrack.todo.data;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.techcrack.todo.todos.Todo;
-import com.techcrack.todo.user.User;
+import com.techcrack.todo.entity.Todo;
+import com.techcrack.todo.entity.User;
 
 @Repository
 public class UserEntityOperation {
+	
+	private Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
 	private UserRepository repo;
@@ -62,8 +66,16 @@ public class UserEntityOperation {
 		List<Todo> todos = user.getTodos();
 		int index = findTodoIndex(todos, id);
 		
-		todos.remove(index);
-		todos.add(index, todo);
+		log.debug(todo + " is Found at " + index);
+		
+		Todo curTodo = todos.get(index);
+		curTodo.setIsDone(todo.getIsDone());
+		curTodo.setTargetDate(todo.getTargetDate());
+		curTodo.setDescription(todo.getDescription());
+		
+		log.debug(user + "");
+		
+		saveUser(user);
 	}
 	
 	private int findTodoIndex(List<Todo> todos, Long id) {

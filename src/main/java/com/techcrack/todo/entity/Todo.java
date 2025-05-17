@@ -1,10 +1,11 @@
-package com.techcrack.todo.todos;
+package com.techcrack.todo.entity;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.techcrack.todo.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -34,11 +36,15 @@ public class Todo {
 	private String description;
 	
 	@Column(name="todo_target_date")
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	private LocalDate targetDate;
 	
 	@Column(name="todo_work_done")
 	private boolean isDone;
 	
+	@Transient
+	private String formatedDate;
+
 	public Todo() {
 		super();
 	}
@@ -71,10 +77,30 @@ public class Todo {
 	public String getDescription() {
 		return description;
 	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getFormatedDate() {
+		return formatedDate;
+	}
+
+	public void setFormatedDate(String formatedDate) {
+		this.formatedDate = formatedDate;
+	}
+
+	public void setDone(boolean isDone) {
+		this.isDone = isDone;
+	}
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
+		}
 
 	public LocalDate getTargetDate() {
 		return targetDate;
@@ -91,7 +117,7 @@ public class Todo {
 	public void setIsDone(boolean isDone) {
 		this.isDone = isDone;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(description, id, isDone, targetDate, user);

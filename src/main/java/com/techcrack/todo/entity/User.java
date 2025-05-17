@@ -1,10 +1,9 @@
-package com.techcrack.todo.user;
+package com.techcrack.todo.entity;
 
 import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.techcrack.todo.todos.Todo;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -1,4 +1,4 @@
-package com.techcrack.todo.todos;
+package com.techcrack.todo.controller.todo;
 
 import java.util.List;
 
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.techcrack.todo.data.UserEntityOperation;
+import com.techcrack.todo.entity.Todo;
+import com.techcrack.todo.service.todo.TodoManager;
 
 import jakarta.validation.Valid;
 
@@ -28,6 +30,18 @@ public class TodoOperation {
 	@Autowired
 	private UserEntityOperation service;
 	
+	@Autowired
+	private TodoManager manage;
+	
+	@GetMapping("/home")
+	public String getHomePage(@SessionAttribute(name = "name", required=false) String name) {
+		if (name == null) {
+			return "redirect:/todos/auth/login";
+		}
+		
+		return "about/welcome";
+	}
+	
 	@GetMapping("/todo-list")
 	public String getTodos(@SessionAttribute(name = "id", required = false) Long id,  
 							@SessionAttribute(name = "name", required = false) String name,
@@ -38,6 +52,8 @@ public class TodoOperation {
 		}
 		
 		List<Todo> todos = service.getToByID(id);
+		
+		manage.setFormatterDate(todos);
 		
 		map.put("todos", todos);
 
@@ -51,7 +67,7 @@ public class TodoOperation {
 		}
 		
 		Todo todo = new Todo();
-		todo.setDescription("Kavin Adithya Likes Reading Books!!!");
+		todo.setDescription("Hey Buddyy !!!!");
 		
 		map.put("todo", todo);
 		
@@ -102,31 +118,30 @@ public class TodoOperation {
 		
 		List<Todo> todos = service.getUserById(userId).getTodos();
 		
-		Todo todo = findTodo(todos, id);
+		Todo todo = manage.findTodo(todos, id);
 		
 		model.put("todo", todo);
+		
+		log.debug(todo.toString());
 		
 		return "todos/newTodoAdd";
 	}
 	
 	
 	@PostMapping("update-todo")
-	public String updateTodo(@ModelAttribute Todo todo, 
+	public String updateTodo(@ModelAttribute("todo") @Valid Todo todo,
+			BindingResult result, 
 			@SessionAttribute(name = "name",required=false) String name,
 			@SessionAttribute(name = "id", required=false) Long userId) {
+		
+		if (result.hasErrors()) {
+			return "todos/newTodoAdd";
+		}
+		
 		service.updateTodo(userId, todo, todo.getId());
 		
 		log.debug("Updated Todo Data");
 		
 		return "redirect:/todos/todo-list";
-	}
-	
-	
-	
-	private Todo findTodo(List<Todo> todos, Long id) {
-		return todos.stream()
-					.filter(x -> x.getId() == id)
-					.toList()
-					.get(0);
 	}
 }
