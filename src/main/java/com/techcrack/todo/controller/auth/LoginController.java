@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.techcrack.todo.service.auth.AuthenticationService;
@@ -54,10 +53,10 @@ public class LoginController {
 	}
 	
 	@GetMapping("/logout")
-	@ResponseBody
 	public String logOut(HttpSession session) {
-		session.invalidate();
 		
-		return "Successfully Logout the session";
+		session.invalidate();
+			
+		return "redirect:/todos/auth/login";
 	}
 }

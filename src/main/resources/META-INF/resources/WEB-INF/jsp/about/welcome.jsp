@@ -1,4 +1,3 @@
-<%@ page import="com.techcrack.todo.todos.*, java.util.List" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -8,6 +7,7 @@
 		<link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"/>
 	</head>
 	<body>
+		<%@ include file="../common/navigation.jspf" %>
 		<div class="container">
 			<h1>
 				Welcome ${name} To Tech-Crack Universe !

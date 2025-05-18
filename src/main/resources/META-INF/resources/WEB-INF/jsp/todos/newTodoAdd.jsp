@@ -1,19 +1,7 @@
-<%@ page import="com.techcrack.todo.entity.Todo, java.util.List" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
-
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>
-			Add-Todo
-		</title>
-		 <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"/>
-		 <link rel="stylesheet" href="/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" >
-	</head>
-	<body>
+		<%@ include file="../common/header.jspf" %>
+		<%@ include file="../common/navigation.jspf" %>
 		<div class="container">
+			
 			<h1>Enter Todo Data : </h1>
 			<form:form method="post" modelAttribute="todo">
 		
