@@ -26,15 +26,4 @@
 			</form:form>
 			
 		</div>
-		
-		<script type="text/javascript" src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
-		<script type="text/javascript" src="/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-		
-		<script type="text/javascript">
-			$('#targetDate').datepicker ({
-				format:'mm/dd/yyyy'
-			});
-		</script>
-	</body>
-</html>
+		<%@ include file="../common/footer.jspf"%>

@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.techcrack.todo.service.auth.AuthenticationService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -53,9 +55,14 @@ public class LoginController {
 	}
 	
 	@GetMapping("/logout")
-	public String logOut(HttpSession session) {
+	public String logOut(HttpServletRequest request, SessionStatus status) {
 		
-		session.invalidate();
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		
+		status.setComplete();
 			
 		return "redirect:/todos/auth/login";
 	}

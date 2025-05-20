@@ -1,5 +1,6 @@
 package com.techcrack.todo.controller.todo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -67,6 +68,7 @@ public class TodoOperation {
 		}
 		
 		Todo todo = new Todo();
+		todo.setTargetDate(LocalDate.now());
 		todo.setDescription("Hey Buddyy !!!!");
 		
 		map.put("todo", todo);

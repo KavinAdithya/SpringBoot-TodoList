@@ -3,8 +3,6 @@ package com.techcrack.todo.entity;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -36,7 +34,6 @@ public class Todo {
 	private String description;
 	
 	@Column(name="todo_target_date")
-	@DateTimeFormat(pattern="dd-MM-yyyy")
 	private LocalDate targetDate;
 	
 	@Column(name="todo_work_done")
