@@ -22,22 +22,21 @@ public class UserEntityOperation {
 		repo.save(user);
 	}
 	
-	@SuppressWarnings("deprecation")
-	public User getUserById(Long id) {
-		return repo.getById(id);
+	public User getUserByUsername(String username) {
+		List<User> user = repo.findByUsername(username);
+		return user != null ? user.getFirst() : null;
 	}
 	
 	public List<User> getAllUsers() {
 		return repo.findAll();
 	}
 	
-	@SuppressWarnings("deprecation")
-	public List<Todo> getToByID(Long id) {
-		return repo.getById(id).getTodos();
+	public List<Todo> getTodosByName(String username) {
+		return getUserByUsername(username).getTodos();
 	}
 	
-	public void addTodo(Long id, Todo todo) {
-		User user =  getUserById(id);
+	public void addTodo(String username, Todo todo) {
+		User user =  getUserByUsername(username);
 		user.getTodos().add(todo);
 		todo.setUsername(user);
 		saveUser(user);
@@ -47,8 +46,8 @@ public class UserEntityOperation {
 		repo.deleteAll();
 	}
 	
-	public void deleteTodoById(Long userId, Long todoId) {
-		User user = getUserById(userId);
+	public void deleteTodoById(String username, Long todoId) {
+		User user = getUserByUsername(username);
 		
 		user.getTodos()
 			.removeIf(x -> x.getId() == todoId);
@@ -60,8 +59,8 @@ public class UserEntityOperation {
 		repo.deleteById(id);
 	}
 	
-	public void updateTodo(Long userId, Todo todo, Long id) {
-		User user = getUserById(userId);
+	public void updateTodo(String userId, Todo todo, Long id) {
+		User user = getUserByUsername(userId);
 		
 		List<Todo> todos = user.getTodos();
 		int index = findTodoIndex(todos, id);

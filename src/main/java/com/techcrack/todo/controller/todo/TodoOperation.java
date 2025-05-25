@@ -6,15 +6,16 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.techcrack.todo.data.UserEntityOperation;
 import com.techcrack.todo.entity.Todo;
@@ -23,7 +24,7 @@ import com.techcrack.todo.service.todo.TodoManager;
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/todos")
+@SessionAttributes("name")
 public class TodoOperation {
 	
 	private Logger log = LoggerFactory.getLogger(getClass());
@@ -33,39 +34,21 @@ public class TodoOperation {
 	
 	@Autowired
 	private TodoManager manage;
+
 	
-	@GetMapping("/home")
-	public String getHomePage(@SessionAttribute(name = "name", required=false) String name) {
-		if (name == null) {
-			return "redirect:/todos/auth/login";
-		}
-		
-		return "about/welcome";
-	}
-	
-	@GetMapping("/todo-list")
-	public String getTodos(@SessionAttribute(name = "id", required = false) Long id,  
-							@SessionAttribute(name = "name", required = false) String name,
-							ModelMap map) {
-		
-		if (name == null) {
-			return "redirect:/todos/auth/login";
-		}
-		
-		List<Todo> todos = service.getToByID(id);
+	@RequestMapping(name="/list-todo", method = RequestMethod.GET)
+	public String getTodos(ModelMap model) {	
+		List<Todo> todos = service.getTodosByName(getUserName());
 		
 		manage.setFormatterDate(todos);
 		
-		map.put("todos", todos);
+		model.put("todos", todos);
 
 		return "todos/todos";
 	}
 	
-	@GetMapping("/add-todo")
-	public String addViewReturn(ModelMap map, @SessionAttribute(name = "name", required=false) String name) {
-		if (name == null) {
-			return "redirect:/todos/auth/login";
-		}
+	@RequestMapping(name=  "/add-todo", method = RequestMethod.GET)
+	public String addViewReturn(ModelMap map) {
 		
 		Todo todo = new Todo();
 		todo.setTargetDate(LocalDate.now());
@@ -76,49 +59,34 @@ public class TodoOperation {
 		return "todos/newTodoAdd";
 	}
 	
-	@PostMapping("/add-todo")
-	public String renderTodo(@SessionAttribute(name = "id", required = false) Long id, 
-							@SessionAttribute(name = "name", required = false) String name, 
-							@ModelAttribute("todo") @Valid Todo todo,
+	@RequestMapping(name = "/add-todo", method = RequestMethod.POST)
+	public String renderTodo( @ModelAttribute("todo") @Valid Todo todo,
 							BindingResult result) {
 		
 		if (result.hasErrors()) {
 			return "todos/newTodoAdd";
 		}
 		
-		if (name == null) {
-			return "redirect:/todos/auth/login";
-		}
-		
-		service.addTodo(id, todo);
+		service.addTodo(getUserName(), todo);
 		log.debug(todo.toString());
 		
-		return "redirect:/todos/todo-list";
+		return "redirect:/todo-list";
 	}
 	
-	@GetMapping("delete-todo")
-	public String deleteTodo(@RequestParam Long id, 
-							@SessionAttribute(name="name", required=false) String name,
-							@SessionAttribute(name="id", required=false) Long userId) {
-		if (name == null) {
-			return "redirect:/todos/auth/login";
-		}
-		
-		service.deleteTodoById(userId, id);
-		return "redirect:/todos/todo-list";
+	@RequestMapping(name = "/delete-todo", method = RequestMethod.GET)
+	public String deleteTodo(@RequestParam Long id) {
+	
+		service.deleteTodoById(getUserName(), id);
+
+		return "redirect:/todo-list";
 	}
 	
-	@GetMapping("update-todo") 
+	@RequestMapping(name = "/update-todo", method=RequestMethod.GET) 
 	public String updateTodo(
 				@RequestParam Long id,
-				ModelMap model, 
-				@SessionAttribute(name = "name",required=false) String name,
-				@SessionAttribute(name = "id", required=false) Long userId) {
-		if (name == null) {
-			return "redirect:/todos/auth/login";
-		}
+				ModelMap model) {
 		
-		List<Todo> todos = service.getUserById(userId).getTodos();
+		List<Todo> todos = service.getTodosByName(getUserName());
 		
 		Todo todo = manage.findTodo(todos, id);
 		
@@ -130,20 +98,27 @@ public class TodoOperation {
 	}
 	
 	
-	@PostMapping("update-todo")
+	@RequestMapping(name = "/update-todo", method = RequestMethod.POST)
 	public String updateTodo(@ModelAttribute("todo") @Valid Todo todo,
-			BindingResult result, 
-			@SessionAttribute(name = "name",required=false) String name,
-			@SessionAttribute(name = "id", required=false) Long userId) {
+			BindingResult result) {
 		
 		if (result.hasErrors()) {
 			return "todos/newTodoAdd";
 		}
 		
-		service.updateTodo(userId, todo, todo.getId());
+		service.updateTodo(getUserName(), todo, todo.getId());
 		
 		log.debug("Updated Todo Data");
 		
-		return "redirect:/todos/todo-list";
+		return "redirect:/todo-list";
 	}
+	
+	private String getUserName() {
+		Authentication authentication = SecurityContextHolder.getContext()
+															.getAuthentication();
+		
+		return authentication.getName();
+	}
+	
+//	service.getUserIdByUserName((String)model.getAttribute("name"))
 }
