@@ -23,14 +23,14 @@
 					<td>${todo.formatedDate}</td>
 					<td>${todo.isDone}</td>
 					
-					<td> <a href="update-todo?id=${todo.id}" class="btn btn-success">Update</a>
-					<td> <a href="delete-todo?id=${todo.id}" class="btn btn-warning">Delete</a>
+					<td> <a href="/update-todo?id=${todo.id}" class="btn btn-success">Update</a>
+					<td> <a href="/delete-todo?id=${todo.id}" class="btn btn-warning">Delete</a>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	
-	<a href="/todos/add-todo" class="btn btn-success">Add Todo </a>
+	<a href="/add-todo" class="btn btn-success">Add Todo </a>
 	
 	
 	<form method="post">

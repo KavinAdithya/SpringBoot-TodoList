@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes({"name"})
 public class WelcomeController {
 	
-	@RequestMapping(name = "/", method = RequestMethod.GET) 
+	@RequestMapping(value = "/", method = RequestMethod.GET) 
 	public String gotoWelcomePage(ModelMap model) {
 		model.addAttribute("name", generateUserName());
 		return "about/welcome";

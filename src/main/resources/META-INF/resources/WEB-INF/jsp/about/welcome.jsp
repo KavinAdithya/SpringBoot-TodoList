@@ -5,6 +5,6 @@
 		Welcome ${name} To Tech-Crack Universe !
 	</h1>
 	<hr>
-	<a href="/todos/todo-list">Manage Todos</a>
+	<a href="/list-todo">Manage Todos</a>
 </div>
 <%@ include file="../common/footer.jspf"%>

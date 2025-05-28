@@ -1,6 +1,7 @@
 package com.techcrack.todo.controller.todo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -36,19 +37,23 @@ public class TodoOperation {
 	private TodoManager manage;
 
 	
-	@RequestMapping(name="/list-todo", method = RequestMethod.GET)
+	@RequestMapping(value ="/list-todo", method = RequestMethod.GET)
 	public String getTodos(ModelMap model) {	
 		List<Todo> todos = service.getTodosByName(getUserName());
 		
 		manage.setFormatterDate(todos);
 		
 		model.put("todos", todos);
+		
+		System.out.println(model.get("dummy") == null ? "Stateless" : "StateFul");
 
 		return "todos/todos";
 	}
 	
-	@RequestMapping(name=  "/add-todo", method = RequestMethod.GET)
+	@RequestMapping(value = "/add-todo", method = RequestMethod.GET)
 	public String addViewReturn(ModelMap map) {
+		
+		map.put("Dummy", "Hey Buddy Render");
 		
 		Todo todo = new Todo();
 		todo.setTargetDate(LocalDate.now());
@@ -59,7 +64,7 @@ public class TodoOperation {
 		return "todos/newTodoAdd";
 	}
 	
-	@RequestMapping(name = "/add-todo", method = RequestMethod.POST)
+	@RequestMapping(value = "/add-todo", method = RequestMethod.POST)
 	public String renderTodo( @ModelAttribute("todo") @Valid Todo todo,
 							BindingResult result) {
 		
@@ -70,23 +75,27 @@ public class TodoOperation {
 		service.addTodo(getUserName(), todo);
 		log.debug(todo.toString());
 		
-		return "redirect:/todo-list";
+		return "redirect:/list-todo";
 	}
 	
-	@RequestMapping(name = "/delete-todo", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete-todo", method = RequestMethod.GET)
 	public String deleteTodo(@RequestParam Long id) {
 	
 		service.deleteTodoById(getUserName(), id);
 
-		return "redirect:/todo-list";
+		return "redirect:/list-todo";
 	}
 	
-	@RequestMapping(name = "/update-todo", method=RequestMethod.GET) 
+	@RequestMapping(value = "/update-todo", method=RequestMethod.GET) 
 	public String updateTodo(
 				@RequestParam Long id,
 				ModelMap model) {
 		
 		List<Todo> todos = service.getTodosByName(getUserName());
+		
+		if (todos == null) {
+			todos = new ArrayList<>();
+		}
 		
 		Todo todo = manage.findTodo(todos, id);
 		
@@ -98,7 +107,7 @@ public class TodoOperation {
 	}
 	
 	
-	@RequestMapping(name = "/update-todo", method = RequestMethod.POST)
+	@RequestMapping(value = "/update-todo", method = RequestMethod.POST)
 	public String updateTodo(@ModelAttribute("todo") @Valid Todo todo,
 			BindingResult result) {
 		
@@ -110,7 +119,7 @@ public class TodoOperation {
 		
 		log.debug("Updated Todo Data");
 		
-		return "redirect:/todo-list";
+		return "redirect:/list-todo";
 	}
 	
 	private String getUserName() {
@@ -119,6 +128,4 @@ public class TodoOperation {
 		
 		return authentication.getName();
 	}
-	
-//	service.getUserIdByUserName((String)model.getAttribute("name"))
 }

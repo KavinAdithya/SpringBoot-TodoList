@@ -24,7 +24,12 @@ public class UserCommandLineOperation implements CommandLineRunner{
 		var user = new User();
 		
 		user.setPassword("dummy");
-		user.setUsername("todo");
+		user.setUsername("techcrack");
+		
+		var user1 = new User();
+		
+		user1.setPassword("dummy");
+		user1.setUsername("java");
 		
 		var todo1 = new Todo();
 		todo1.setDescription("First Todo");
@@ -46,5 +51,6 @@ public class UserCommandLineOperation implements CommandLineRunner{
 		user.setTodos(todos);
 		
 		ser.saveUser(user);
+		ser.saveUser(user1);
 	}
 }

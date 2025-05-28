@@ -1,5 +1,6 @@
 package com.techcrack.todo.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,8 +24,13 @@ public class UserEntityOperation {
 	}
 	
 	public User getUserByUsername(String username) {
+		log.info("Searching For user : " + username);
+		
 		List<User> user = repo.findByUsername(username);
-		return user != null ? user.getFirst() : null;
+		
+		log.info("User Found : " + user);
+		
+		return user.getFirst();
 	}
 	
 	public List<User> getAllUsers() {
@@ -32,7 +38,11 @@ public class UserEntityOperation {
 	}
 	
 	public List<Todo> getTodosByName(String username) {
-		return getUserByUsername(username).getTodos();
+		User user = getUserByUsername(username);
+		
+		log.info("User Got : " + user);
+		
+		return user.getTodos();
 	}
 	
 	public void addTodo(String username, Todo todo) {
