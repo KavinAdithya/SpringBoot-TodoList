@@ -6,13 +6,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 import com.techcrack.todo.data.UserEntityOperation;
 import com.techcrack.todo.entity.Todo;
 import com.techcrack.todo.entity.User;
 
-@Component
+//@Component
 public class UserCommandLineOperation implements CommandLineRunner{
 	
 	@Autowired
